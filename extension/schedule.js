@@ -9,6 +9,8 @@ var equals = require('deep-equal');
 
 var POLL_INTERVAL = 60 * 1000;
 
+var serverURL = 'https://gamesdonequick.com/tracker/search';
+
 module.exports = function (nodecg) {
     var checklist = require('./checklist')(nodecg);
     var scheduleRep = nodecg.Replicant('schedule', {defaultValue: [], persistent: false});
@@ -73,7 +75,7 @@ module.exports = function (nodecg) {
         
         //Removed RunnerPromise
         var schedulePromise = rp({
-            uri: 'https://gamesdonequick.com/tracker/search',
+            uri: serverURL,
             qs: {
                 type: 'run',
                 event: 17
@@ -85,9 +87,9 @@ module.exports = function (nodecg) {
         //Also removed a lot of download fields
         return Q.spread([schedulePromise], function(scheduleJSON) {
             /* jshint -W106 */
-            var formattedSchedule = scheduleJSON.map(function(run) {
+            var formattedSchedule = scheduleJSON.map(function(event) {
                 var boxartUrl = '/graphics/agdq16-layouts/img/boxart/default.png';
-                var boxartName = new Buffer(run.fields.display_name).toString('base64');
+                var boxartName = new Buffer(event.fields.display_name).toString('base64');
                 var boxartPath = path.resolve(__dirname, '../graphics/img/boxart/', boxartName +'.jpg');
 
                 if (fs.existsSync(boxartPath)) {
@@ -95,13 +97,13 @@ module.exports = function (nodecg) {
                 }
                 
                 return {
-                    name: run.fields.display_name || 'Unknown',
-                    console: run.fields.console || 'Unknown',
-                    commentators: run.fields.commentators || 'Unknown',
-                    category: run.fields.category || 'Any%',
-                    startTime: Date.parse(run.fields.starttime) || null,
-                    order: run.fields.order,
-                    runners: run.fields.runners,
+                    name: event.fields.display_name || 'Unknown',
+                    console: event.fields.console || 'Unknown',
+                    commentators: event.fields.commentators || 'Unknown',
+                    category: event.fields.category || 'Any%',
+                    startTime: Date.parse(event.fields.starttime) || null,
+                    order: event.fields.order,
+                    runners: event.fields.runners,
                     boxart: {
                         url: boxartUrl
                     },
