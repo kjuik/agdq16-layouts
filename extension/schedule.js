@@ -70,8 +70,16 @@ module.exports = function (nodecg) {
 
     function update() {
         var deferred = Q.defer();
-        
-        //Removed RunnerPromise
+
+        var runnersPromise = rp({
+            uri: 'https://gamesdonequick.com/tracker/search',
+            qs: {
+                type: 'runner',
+                event: 17
+            },
+            json: true
+        });
+
         var schedulePromise = rp({
             uri: 'https://gamesdonequick.com/tracker/search',
             qs: {
@@ -81,9 +89,13 @@ module.exports = function (nodecg) {
             json: true
         });
 
-        //Removed RunnerJSON, and all info using it. 
-        //Also removed a lot of download fields
-        return Q.spread([schedulePromise], function(scheduleJSON) {
+        return Q.spread([runnersPromise, schedulePromise], function(runnersJSON, scheduleJSON) {
+            var allRunners = [];
+            runnersJSON.forEach(function(obj) {
+                obj.fields.stream = obj.fields.stream.split('/').pop();
+                allRunners[obj.pk] = obj.fields;
+            });
+
             /* jshint -W106 */
             var formattedSchedule = scheduleJSON.map(function(run) {
                 var boxartUrl = '/graphics/agdq16-layouts/img/boxart/default.png';
@@ -93,7 +105,24 @@ module.exports = function (nodecg) {
                 if (fs.existsSync(boxartPath)) {
                     boxartUrl = '/graphics/agdq16-layouts/img/boxart/' + boxartName + '.jpg';
                 }
-                
+
+                var runners = run.fields.runners.map(function(runnerId) {
+                    return allRunners[runnerId];
+                });
+
+                var concatenatedRunners;
+                if (runners.length === 1) {
+                    concatenatedRunners = runners[0].name;
+                } else {
+                    concatenatedRunners = runners.reduce(function(prev, curr) {
+                        if (typeof prev === 'object') {
+                            return prev.name + ', ' + curr.name;
+                        } else {
+                            return prev + ', ' + curr.name;
+                        }
+                    });
+                }
+
                 return {
                     name: run.fields.display_name || 'Unknown',
                     console: run.fields.console || 'Unknown',
@@ -101,7 +130,10 @@ module.exports = function (nodecg) {
                     category: run.fields.category || 'Any%',
                     startTime: Date.parse(run.fields.starttime) || null,
                     order: run.fields.order,
-                    runners: run.fields.runners,
+                    estimate: run.fields.run_time || 'Unknown',
+                    releaseYear: run.fields.release_year,
+                    runners: runners,
+                    concatenatedRunners: concatenatedRunners,
                     boxart: {
                         url: boxartUrl
                     },
@@ -126,6 +158,28 @@ module.exports = function (nodecg) {
                 _setCurrentRun(scheduleRep.value[0]);
             }
 
+            // TODO: This is commented out because it blows away any manual edits made to currentRun.
+            // TODO: Need to figure out a merge system that preserves manual edits when they don't conflict.
+            /*// Else, update the currentRun
+            else {
+                // First, try to find the current run by name.
+                var updatedCurrentRun = formattedSchedule.some(function(run) {
+                    if (run.name === currentRun.value.name) {
+                        _setCurrentRun(run);
+                        return true;
+                    }
+                });
+
+                // If that fails, try to update it by order.
+                if (!updatedCurrentRun) {
+                    formattedSchedule.some(function(run) {
+                        if (run.order === currentRun.value.order) {
+                            _setCurrentRun(run);
+                            return true;
+                        }
+                    });
+                }
+            }*/
         }).catch(function(err) {
             nodecg.log.error('[schedule] Failed to update:', err.stack);
         });
