@@ -60,29 +60,7 @@ define([
         this.nameText.y = 1;
         this.nameText.maxWidth = 308;
 
-        /* ----- */
-
-        this.twitchContainer = new createjs.Container();
-
-        this.twitchBackground = new createjs.Shape();
-        this.twitchBackground.graphics.beginFill('#985da6');
-        this.twitchBackgroundRect = this.twitchBackground.graphics.drawRect(0, 0, 322, NAME_RECT_HEIGHT).command;
-        this.twitchBackground.skewX = -10;
-
-        this.twitchIcon = new createjs.Bitmap(preloader.getResult('nameplate-twitch-logo'));
-        this.twitchIcon.y = 6;
-        this.twitchIcon.scaleY = 23 / this.twitchIcon.getBounds().height;
-        this.twitchIcon.scaleX = 23 / this.twitchIcon.getBounds().height;
-        this.twitchIcon.mask = this.twitchBackground;
-
-        this.twitchText = new createjs.Text('', '900 28px proxima-nova', 'white');
-        this.twitchText.y = 1;
-        this.twitchText.maxWidth = 270;
-
-        this.twitchContainer.addChild(this.twitchBackground, this.twitchIcon, this.twitchText);
-        this.twitchContainer.visible = false;
-
-        /* ----- */
+        //REMOVED TWITCH NAMEPATE FUNCTIONALITY
 
         this.timeText = new createjs.Text('0:00:00', '900 30px proxima-nova', 'white');
         this.timeText.y = 37;
@@ -111,7 +89,7 @@ define([
         this.background.graphics.drawRect(0, 0, WIDTH, HEIGHT);
 
         this.addChild(this.background, this.nameBackground, this.nameText, this.timeText, this.placeText,
-            this.twitchContainer, this.audioIcon, this.bottomBorder, this.cover1, this.cover2);
+            this.audioIcon, this.bottomBorder, this.cover1, this.cover2);
         stage.addChild(this);
 
         /* ----- */
@@ -122,18 +100,6 @@ define([
 
             this.nameText.textAlign = 'right';
             this.nameText.x = WIDTH - 5;
-
-            this.twitchIcon.x = WIDTH - 30;
-
-            this.twitchText.textAlign = 'right';
-            this.twitchText.x = WIDTH- 38;
-
-            this.twitchBackground.skewX = 10;
-            this.twitchBackground.scaleX = -1;
-            this.twitchBackground.x = WIDTH + 10;
-
-            this.timeText.textAlign = 'right';
-            this.timeText.x = this.nameText.x;
 
             this.placeText.textAlign = 'right';
 
@@ -148,38 +114,7 @@ define([
         } else {
             this.nameText.x = 5;
 
-            this.twitchIcon.x = 8;
-
-            this.twitchText.x = 38;
-
-            this.twitchBackground.x = -10;
-
-            this.timeText.x = this.nameText.x;
-
             this.audioIcon.x = NAME_RECT_WIDTH + (WIDTH - NAME_RECT_WIDTH) / 2;
-        }
-
-        this.twitchTl = new TimelineMax({repeat: -1});
-        var twitchHideX = this.alignment === 'right' ? 322 : -322;
-        this.twitchContainer.x = twitchHideX;
-        this.twitchContainer.visible = true;
-
-        this.twitchTl = new TimelineMax({repeat: -1});
-
-        this.twitchTl.to({}, 90, {});
-
-        this.twitchTl.to(this.twitchContainer, 1.2, {
-            x: 0,
-            ease: Power2.easeInOut
-        });
-
-        this.twitchTl.to(this.twitchContainer, 0.9, {
-            x: twitchHideX,
-            ease: Power2.easeIn
-        }, '+=8.5');
-
-        if (this.twitchText.text) {
-            this.restartTwitchTimeline();
         }
 
         /* ----- */
@@ -194,15 +129,6 @@ define([
                 ease: Power3.easeInOut,
                 onComplete: function() {
                     this.nameText.text = name;
-                    this.twitchText.text = stream;
-
-                    if (stream) {
-                        this.restartTwitchTimeline();
-                    } else {
-                        this.twitchTl.seek(0);
-                        this.twitchTl.pause();
-                        this.twitchContainer.visible = false;
-                    }
                 }.bind(this)
             }, 'enter');
 
@@ -309,11 +235,6 @@ define([
     p.configure = function(opts) {
         this.stage.canvas.style.top = opts.y + 'px';
         this.bottomBorder.visible = opts.bottomBorder;
-    };
-
-    p.restartTwitchTimeline = function() {
-        this.twitchTl.seek(0);
-        this.twitchTl.play();
     };
 
     p.disable = function() {

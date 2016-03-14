@@ -50,24 +50,7 @@ define([
 
         this.estimateText = new createjs.Text('EST: ?', '', '#afe2f8');
 
-        /* ----- */
-
-        this.twitchContainer = new createjs.Container();
-
-        this.twitchBackground = new createjs.Shape();
-        this.twitchBackground.graphics.beginFill('#985da6');
-        this.twitchBackgroundRect = this.twitchBackground.graphics.drawRect(0, 0, 0, 0).command;
-
-        this.twitchIcon = new createjs.Bitmap(preloader.getResult('nameplate-twitch-logo'));
-        this.twitchIcon.regY = this.twitchIcon.getBounds().height / 2;
-
-        this.twitchText = new createjs.Text('', '', 'white');
-        this.twitchText.textBaseline = 'middle';
-
-        this.twitchContainer.addChild(this.twitchBackground, this.twitchIcon, this.twitchText);
-        this.twitchContainer.visible = false;
-
-        /* ----- */
+        //Removed Tiwtch Functionality
 
         this.timeText = new createjs.Text('0:00:00', '900 30px proxima-nova', 'white');
         this.timeText.textBaseline = 'middle';
@@ -92,8 +75,8 @@ define([
         this.backgroundFill = this.background.graphics.beginFill('#00AEEF').command;
         this.backgroundRect = this.background.graphics.drawRect(0, 0, 0, 0).command;
 
-        this.addChild(this.background, this.nameText, this.timeText, this.estimateText, this.audioIcon,
-            this.twitchContainer, this.bottomBorder, this.cover1, this.cover2);
+        this.addChild(this.background, this.nameText, this.timeText, this.estimateText, this.audioIcon,/*reomved twitch container*/
+            this.bottomBorder, this.cover1, this.cover2);
         stage.addChild(this);
 
         /* ----- */
@@ -109,17 +92,11 @@ define([
                 ease: Power3.easeInOut,
                 onComplete: function() {
                     this.nameText.text = name;
-                    this.twitchText.text = stream;
                     this.estimateText.text = 'EST: ' + estimate;
 
                     this.repositionAudioIcon();
 
-                    if (stream) {
-                        this.restartTwitchTimeline();
-                    } else if (this.twitchTl) {
-                        this.twitchTl.kill();
-                        this.twitchContainer.visible = false;
-                    }
+                    //NoTwitch
                 }.bind(this)
             }, 'enter');
 
@@ -148,10 +125,11 @@ define([
             }, [], this);
         }.bind(this), 1000);
 
-        globals.currentRunRep.on('change', function(oldVal, newVal) {
-            var runner = newVal.runners[index];
-            if (runner) {
-                handleCurrentRunChange(runner.name, runner.stream, newVal.estimate);
+        globals.currentRunRep.on('change', function (oldVal, newVal) {
+            //kasper: Changed runner to event.
+            var event = newVal.runners[index];
+            if (event) {
+                handleCurrentRunChange(event.name, event.stream, newVal.estimate);
             } else {
                 handleCurrentRunChange('?', '', newVal.estimate);
             }
@@ -219,20 +197,10 @@ define([
             - (opts.width * 0.03);
 
         var nameTextBounds = this.nameText.getTransformedBounds();
-        var twitchRectHeight = nameTextBounds.y + nameTextBounds.height;
-        this.twitchBackgroundRect.w = this.nameText.maxWidth + horizontalMargin + 10;
-        this.twitchBackgroundRect.h = twitchRectHeight;
-        var twitchFontSize = opts.nameFontSize * 0.9;
-        var twitchIconScale = twitchFontSize / this.twitchIcon.getBounds().height;
-        var twitchCenterY = this.twitchBackgroundRect.h / 2;
-        this.twitchText.font = '900 ' + twitchFontSize + 'px proxima-nova';
-        this.twitchText.y = twitchCenterY;
-        this.twitchIcon.scaleY = twitchIconScale;
-        this.twitchIcon.scaleX = twitchIconScale;
-        this.twitchIcon.y = twitchCenterY;
+        //Removed twitch
 
         this.estimateText.font = '800 ' + opts.estimateFontSize + 'px proxima-nova';
-        this.estimateText.y = twitchRectHeight - (opts.nameFontSize * 0.1);
+        this.estimateText.y = (nameTextBounds.y + nameTextBounds.height) - (opts.nameFontSize * 0.1);
 
         this.cover1Rect.h = opts.height;
         this.cover2Rect.h = opts.height;
@@ -254,15 +222,6 @@ define([
             this.timeText.x = horizontalMargin;
             this.timeText.textAlign = 'left';
 
-            this.twitchIcon.regX = this.twitchIcon.getBounds().width;
-            this.twitchIcon.x = this.nameText.x;
-            this.twitchText.textAlign = 'right';
-            this.twitchText.x = this.twitchIcon.x - this.twitchIcon.getTransformedBounds().width
-                - (twitchFontSize * 0.3);
-            this.twitchBackground.scaleX = -1;
-            this.twitchBackground.x = opts.width + 10;
-            this.twitchBackground.skewX = 10;
-
             this.cover1.scaleX = -1;
             this.cover1.x = opts.width;
             this.cover2.scaleX = -1;
@@ -276,15 +235,6 @@ define([
             this.timeText.x = opts.width - horizontalMargin;
             this.timeText.textAlign = 'right';
 
-            this.twitchIcon.regX = 0;
-            this.twitchIcon.x = this.nameText.x;
-            this.twitchText.textAlign = 'left';
-            this.twitchText.x = this.twitchIcon.x + this.twitchIcon.getTransformedBounds().width
-                + (twitchFontSize * 0.3);
-            this.twitchBackground.scaleX = 1;
-            this.twitchBackground.x = -10;
-            this.twitchBackground.skewX = -10;
-
             this.cover1.scaleX = 1;
             this.cover1.x = 0;
             this.cover2.scaleX = 1;
@@ -292,8 +242,6 @@ define([
         }
 
         this.estimateText.x = this.nameText.x;
-        this.twitchText.maxWidth = this.twitchBackgroundRect.w - Math.abs(this.twitchBackground.x - this.twitchText.x)
-            - horizontalMargin;
 
         if (opts.audioIcon) {
             this.audioIcon.visible = true;
@@ -301,10 +249,8 @@ define([
         } else {
             this.audioIcon.visible = false;
         }
-
-        if (this.twitchText.text) {
-            this.restartTwitchTimeline();
-        }
+        
+        //Removed twitch
     };
 
     p.repositionAudioIcon = function() {
@@ -320,29 +266,7 @@ define([
     };
 
 
-    p.restartTwitchTimeline = function() {
-        if (this.twitchTl) {
-            this.twitchTl.kill();
-        }
-
-        this.twitchTl = new TimelineMax({repeat: -1});
-
-        var twitchHideX = this.alignment === 'right' ? this.twitchBackgroundRect.w : -this.twitchBackgroundRect.w;
-        this.twitchContainer.visible = true;
-        this.twitchContainer.x = twitchHideX;
-
-        this.twitchTl.to({}, 90, {});
-
-        this.twitchTl.to(this.twitchContainer, 1.2, {
-            x: 0,
-            ease: Power2.easeInOut
-        });
-
-        this.twitchTl.to(this.twitchContainer, 0.9, {
-            x: twitchHideX,
-            ease: Power2.easeIn
-        }, '+=8.5');
-    };
+    //Removed tiwtch function
 
     p.disable = function() {
         this.stage.visible = false;
