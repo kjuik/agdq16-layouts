@@ -433,8 +433,9 @@ define([
         }, 'showCTA_end');
 
         tl.call(function() {
-            showTotal();
-            showCurrentBids();
+            //Kasper: FOUND YOU!!! 'Ahem'... This thing shows the total amount of donations the the far right corner of the screen. We could use this one To show the time left for the jam?
+            //showTotal();
+            showCurrentPrizes();
         }, null, null, 'showCTA_end+=0.3');
     }
 
@@ -463,6 +464,7 @@ define([
                      */
                     var upNextRun = layout.currentLayoutName === 'break' ? globals.currentRun : globals.nextRun;
                     if (upNextRun) {
+                        //Kasper: This first line seems to want to show the names of whoever is managing the the thing on top of the name of the event. This could be usefull for nametags. Currently concatenated runners are not downloaded in the schedule.
                         showMainLine1(upNextRun.concatenatedRunners);
                         showMainLine2(upNextRun.name.replace('\\n', ' ').trim() + ' - ' + upNextRun.category);
                     } else {
@@ -473,7 +475,8 @@ define([
                                 showMainLine1('');
                                 showMainLine2('');
                             },
-                            onComplete: showCurrentBids
+                            //Kasper: Changed showcurrentbids
+                            onComplete: showCurrentPrizes
                         });
                     }
                 }
@@ -492,131 +495,8 @@ define([
         });
     }
 
-    function showCurrentBids(immediate) {
-        if (immediate) tl.clear();
-
-        if (globals.currentBids.length > 0) {
-            var showedLabel = false;
-
-            // Figure out what bids to display in this batch
-            var bidsToDisplay = [];
-
-            globals.currentBids.forEach(function(bid) {
-                // Don't show closed bids in the automatic rotation.
-                if (bid.state.toLowerCase() === 'closed') return;
-
-                // We have at least one bid to show, so show the label
-                if (!showedLabel) {
-                    showedLabel = true;
-                    tl.to({}, 0.3, {
-                        onStart: function() {
-                            showLabel('DONATION\nINCENTIVES', 24);
-                        }
-                    });
-                }
-
-                // If we have already have our three bids determined, we still need to check
-                // if any of the remaining bids are for the same speedrun as the third bid.
-                // This ensures that we are never displaying a partial list of bids for a given speedrun.
-                if (bidsToDisplay.length < 3) {
-                    bidsToDisplay.push(bid);
-                } else if (bid.speedrun === bidsToDisplay[bidsToDisplay.length - 1].speedrun) {
-                    bidsToDisplay.push(bid);
-                }
-            });
-
-            // Loop over each bid and queue it up on the timeline
-            bidsToDisplay.forEach(function(bid) {
-                showBid(bid);
-            });
-        }
-
-        tl.to({}, 0.3, {
-            onStart: function() {
-                showMainLine1('');
-                showMainLine2('');
-            },
-            onComplete: showCurrentPrizes
-        });
-    }
-
-    function showBid(bid, immediate) {
-        if (immediate) {
-            tl.clear();
-            tl.call(showLabel, ['BID WAR', 33]);
-        }
-
-        var mainLine1Text = bid.description;
-        var mainLine1Color = WHITE;
-
-        // If this bid is closed, we want the text to default to gray.
-        if (bid.state.toLowerCase() === 'closed') {
-            mainLine1Text += ' (CLOSED)';
-            mainLine1Color = GRAY;
-        }
-
-        // GSAP is dumb with `call` sometimes. Putting this in a near-zero duration tween seems to be more reliable.
-        tl.to({}, 0.01, {
-            onComplete: function() {
-                showMainLine1(mainLine1Text, mainLine1Color);
-            }
-        });
-
-        // If this is a donation war, up to three options for it.
-        // Else, it must be a normal incentive, so show its total amount raised and its goal.
-        if (bid.options) {
-            // If there are no options yet, display a message.
-            if (bid.options.length === 0) {
-                tl.call(function() {
-                    showMainLine2('Be the first to bid!');
-                }, null, null);
-            }
-
-            else {
-                bid.options.forEach(function(option, index) {
-                    if (index > 2) return;
-
-                    tl.call(function() {
-                        // If this bid is closed, the first option (the winner)
-                        // should be green and the rest should be red.
-                        var mainLine2Color = WHITE;
-                        if (bid.state.toLowerCase() === 'closed') {
-                            if (index === 0) {
-                                mainLine2Color = GREEN;
-                            } else {
-                                mainLine2Color = RED;
-                            }
-                        }
-
-                        var mainLine2Text = (index + 1) + '. ' + (option.description || option.name)
-                            + ' - ' + option.total;
-                        showMainLine2(mainLine2Text, mainLine2Color);
-                    }, null, null, '+=' + (0.08 + (index * 4)));
-                });
-            }
-        }
-
-        else {
-            tl.call(function() {
-                var mainLine2Color = bid.state.toLowerCase() === 'closed' ? GRAY : WHITE;
-                showMainLine2(bid.total + ' / ' + bid.goal, mainLine2Color);
-            }, null, null, '+=0.08');
-        }
-
-        // Give the bid some time to show
-        tl.to({}, globals.displayDuration, {});
-
-        // If we're just showing this one bid on-demand, show "Prizes" next.
-        if (immediate) {
-            tl.to({}, 0.3, {
-                onStart: function() {
-                    showMainLine1('');
-                    showMainLine2('');
-                },
-                onComplete: showCurrentPrizes
-            });
-        }
-    }
+    //Kasper: Removed showcurrentbids-function
+    //Kasper: Removed showbid-function
 
     function showCurrentPrizes(immediate) {
         if (immediate) tl.clear();
@@ -694,19 +574,12 @@ define([
 
     nodecg.listenFor('barDemand', function(data) {
         switch (data.type) {
-            case 'bid':
-                showBid(data, true);
-                break;
             case 'prize':
                 showPrize(data, true);
                 break;
             default:
                 throw new Error('Invalid barDemand type: ' + data.type);
         }
-    });
-
-    nodecg.listenFor('barCurrentBids', function() {
-        showCurrentBids(true);
     });
 
     nodecg.listenFor('barCurrentPrizes', function() {
