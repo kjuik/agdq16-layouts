@@ -182,8 +182,8 @@ module.exports = function(nodecg) {
         tweet.imageUrls = imageUrls;
 
         // Highlight the #AGDQ2016 hashtag
-        var HASHTAG = '#AGDQ2016';
-        var hashtag = '#agdq2016';
+        var HASHTAG = '#NGJ16';
+        var hashtag = '#ngj16';
         tweet.text = tweet.text.split(HASHTAG).join('<span class="agdqHashtag">' + HASHTAG + '</span>');
         tweet.text = tweet.text.split(hashtag).join('<span class="agdqHashtag">' + hashtag + '</span>');
 

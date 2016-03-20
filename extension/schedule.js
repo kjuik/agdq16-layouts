@@ -72,7 +72,7 @@ module.exports = function (nodecg) {
 
     function update() {
         var deferred = Q.defer();
-        
+
         //Removed RunnerPromise
         var schedulePromise = rp({
             uri: serverURL,
@@ -83,23 +83,26 @@ module.exports = function (nodecg) {
             json: true
         });
 
-        //Removed RunnerJSON, and all info using it. 
+        //Removed RunnerJSON, and all info using it.
         //Also removed a lot of download fields
         return Q.spread([schedulePromise], function(scheduleJSON) {
             /* jshint -W106 */
             var formattedSchedule = scheduleJSON.map(function(event) {
-                var boxartUrl = '/graphics/agdq16-layouts/img/boxart/default.png';
+              //Kasper: Fucked around with this. I think It always loads from drive.
+                var boxartUrl = path.resolve(__dirname, '../graphics/img/boxart/default.jpg';
                 var boxartName = new Buffer(event.fields.display_name).toString('base64');
                 var boxartPath = path.resolve(__dirname, '../graphics/img/boxart/', boxartName +'.jpg');
 
                 if (fs.existsSync(boxartPath)) {
-                    boxartUrl = '/graphics/agdq16-layouts/img/boxart/' + boxartName + '.jpg';
+                    boxartUrl = path.resolve(__dirname, '../graphics/img/boxart/', boxartName +'.jpg');
                 }
-                
+
                 return {
                     name: event.fields.display_name || 'Unknown',
-                    console: event.fields.console || 'Unknown',
                     commentators: event.fields.commentators || 'Unknown',
+                    roles:"Unknown",
+
+                    console: event.fields.console || 'Unknown',
                     category: event.fields.category || 'Any%',
                     startTime: Date.parse(event.fields.starttime) || null,
                     order: event.fields.order,
