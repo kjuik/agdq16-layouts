@@ -1,116 +1,37 @@
-[
-	{
-		"fields": {
-			"category": "",
-			"giantbomb_id": null,
-			"endtime": "2016-01-03T17:00:00Z",
-			"console": "",
-			"name": "DummyShow1",
-			"description": "",
-			"setup_time": "0:05:00",
-			"public": "AGDQ Pre-show (Awesome Games Done Quick 2016)",
-			"run_time": "0:25:00",
-			"starttime": "2016-01-03T16:30:00Z",
-			"display_name": "AGDQ Pre-show",
-			"commentators": "",
-			"order": 1,
-			"deprecated_runners": "None",
-			"event": 17,
-			"runners": [2],
-			"release_year": null
-		},
-		"model": "tracker.speedrun", "pk": 1295
-	},
-	{
-		"fields": {
-			"category": "Any%",
-			"giantbomb_id": 46582,
-			"endtime": "2016-01-03T18:08:00Z",
-			"console": "WIIU",
-			"name": "DummyShow2",
-			"description": "",
-			"setup_time": "0:15:02",
-			"public": "Splatoon Any% (Awesome Games Done Quick 2016)",
-			"run_time": "0:52:58",
-			"starttime": "2016-01-03T17:00:00Z",
-			"display_name": "Splatoon",
-			"commentators": "",
-			"order": 2,
-			"deprecated_runners": "Tones Balones",
-			"event": 17,
-			"runners": [9],
-			"release_year": 2015
-		},
-		"model": "tracker.speedrun",
-		"pk": 1596
-		},
-		{
-			"fields": {
-				"category": "All Worlds",
-				"giantbomb_id": 17195,
-				"endtime": "2016-01-03T19:08:00Z",
-				"console": "Wii",
-				"name": "DummyShow3",
-				"description": "",
-				"setup_time": "0:07:50",
-				"public": "Super Monkey Ball: Banana Blitz All Worlds (Awesome Games Done Quick 2016)",
-				"run_time": "0:52:10",
-				"starttime": "2016-01-03T18:08:00Z",
-				"display_name": "Super Monkey Ball:\\nBanana Blitz",
-				"commentators": "",
-				"order": 3,
-				"deprecated_runners": "Miles",
-				"event": 17,
-				"runners": [171],
-				"release_year": 2006
-			},
-			"model": "tracker.speedrun",
-			"pk": 1597
-		},
-		{
-			"fields": {
-				"category": "Expert through Master",
-				"giantbomb_id": 7247,
-				"endtime": "2016-01-03T19:37:00Z",
-				"console": "GCN",
-				"name": "DummyShow4",
-				"description": "",
-				"setup_time": "0:10:13",
-				"public": "Super Monkey Ball Expert through Master (Awesome Games Done Quick 2016)",
-				"run_time": "0:18:47",
-				"starttime": "2016-01-03T19:08:00Z",
-				"display_name": "Super Monkey Ball\\n",
-				"commentators": "",
-				"order": 4,
-				"deprecated_runners": "Barhunga",
-				"event": 17,
-				"runners": [40],
-				"release_year": 2001
-			},
-			"model": "tracker.speedrun",
-			"pk": 1598
-		},
-		{
-			"fields": {
-				"category": "Star Cup",
-				"giantbomb_id": null,
-				"endtime": "2016-01-09T21:16:27Z",
-				"console": "N64",
-				"name": "DummyShow5",
-				"description": "Bonus Incentive: Mario Kart 64 TAS (Star Cup by Weatherton)",
-				"setup_time": "0:16:29",
-				"public": "TASBOT Plays Mario Kart 64 Star Cup (Awesome Games Done Quick 2016)",
-				"run_time": "0:04:31",
-				"starttime": "2016-01-09T20:55:27Z",
-				"display_name": "TASBOT Plays Mario Kart 64",
-				"commentators": "",
-				"order": 148,
-				"deprecated_runners": "Weatherton",
-				"event": 17,
-				"runners": [182],
-				"release_year": 1996
-			},
-			"model": "tracker.speedrun",
-			"pk": 1741
-		},
-]
+[{
+	"category": "",
+	"roles": "",
+	"name": "DummyShow1",
+	"starttime": "2016-01-03T16:30:00Z",
+	"commentators": "",
+	"order": 1
+}, {
+	"category": "Any%",
+	"roles": "WIIU",
+	"name": "DummyShow2",
+	"starttime": "2016-01-03T17:00:00Z",
+	"commentators": "",
+	"order": 2
+}, {
+	"category": "All Worlds",
+	"roles": "Wii",
+	"name": "DummyShow3",
+	"starttime": "2016-01-03T18:08:00Z",
+	"commentators": "",
+	"order": 3
+}, {
+	"category": "Expert through Master",
+	"roles": "GCN",
+	"name": "DummyShow4",
+	"starttime": "2016-01-03T19:08:00Z",
+	"commentators": "",
+	"order": 4
+
+}, {
+	"name": "DummyShow5",
+	"commentators": "",
+	"roles": "N64",
+	"category": "Star Cup",
+	"starttime": "2016-01-09T20:55:27Z",
+	"order": 5
+}]
