@@ -80,17 +80,11 @@ module.exports = function(nodecg) {
 	function update() {
 		var deferred = Q.defer();
 
-		//Removed RunnerPromise
-		/*  var schedulePromise = rp({
-		      uri: fileLocation,
-		      json: true
-		  });*/
+		//Removed request-promises
 		//Kasper: We use readfile library to get the file and parse it.
 		var scheduleFile = jsonfile.readFileSync(fileLocation);
 		//Removed RunnerJSON, and all info using it.
 		//Also removed a lot of download fields
-		//    return readJSON(fileLocation, function(eror, scheduleFile)
-		//    {
 		//Kasper: spreads the jsondata into an array.
 		return Q.spread([scheduleFile], function(scheduleJSON) {
 			/* jshint -W106 */
@@ -107,10 +101,10 @@ module.exports = function(nodecg) {
 
 				return {
 					name: event.name || 'Unknown',
-					commentators: event.commentators || 'Unknown',
+					commentators: event.commentators || 'None',
 					roles: event.roles || "Unknown",
 					category: event.category || 'Any%',
-					startTime: Date.parse(event.starttime) || null,
+					startTime: event.startTime || null,
 					order: event.order,
 					boxart: {
 						url: boxartUrl
@@ -138,7 +132,6 @@ module.exports = function(nodecg) {
 		}).catch(function(err) {
 			nodecg.log.error('[schedule] Failed to update:', err.stack);
 		});
-		//  });
 	}
 
 	function _setCurrentRun(event) {

@@ -8,7 +8,7 @@
     <link rel="import" href="components/nodecg-toast/nodecg-toast.html">
     <link rel="stylesheet" href="shared-panel-styles.css">
     <style>
-        #total {
+        #jamTimer {
             text-align: center;
             margin-top: 0;
             margin-bottom: 8px;
@@ -25,54 +25,81 @@
 </head>
 <body>
     <nodecg-toast id="toast"></nodecg-toast>
+<div class="layout horizontal" style="margin-bottom: 8px;">
+    <h2 >days: </h2>
+    <h2 id="days">?</h2>
+</div>
+<div class="layout horizontal" style="margin-bottom: 8px;">
+    <h2 >hours: </h2>
+    <h2 id="hours">?</h2>
+</div>
+<div class="layout horizontal" style="margin-bottom: 8px;">
+    <h2 >minutes: </h2>
+    <h2 id="minutes">?</h2>
+</div>
+<div class="layout horizontal" style="margin-bottom: 8px;">
+    <h2 >seconds: </h2>
+    <h2 id="seconds">?</h2>
+</div>
 
-    <h2 id="total">?</h2>
-
-    <div class="layout horizontal" style="margin-bottom: 8px;">
-        <paper-button id="update" class="flex" raised>Force Update</paper-button>
-        <paper-button id="edit" class="nodecg-configure" nodecg-dialog="edit-total">Edit...</paper-button>
+<!--    <div class="layout horizontal" style="margin-bottom: 8px;">
+        <paper-button id="edit" class="nodecg-configure" nodecg-dialog="edit-jamTimer">Edit...</paper-button>
     </div>
-
-    <nodecg-toggle replicant-name="autoUpdateTotal">Automatic Updates</nodecg-toggle>
-
+-->
     <script>
-        var totalDisplay = document.getElementById('total');
-        var total = nodecg.Replicant('total');
-        total.on('change', function(oldVal, newVal) {
-            totalDisplay.innerText = newVal.formatted;
+        var daysLeft = document.getElementById('days');
+        var hoursLeft = document.getElementById('hours');
+        var minutesLeft = document.getElementById('minutes');
+        var secondsLeft = document.getElementById('seconds');
+        var jamTimer = nodecg.Replicant('jamTimer');
+
+        jamTimer.on('change', function(oldVal, newVal) {
+            if(newVal)
+            {
+                daysLeft.innerText = newVal.days;
+                hoursLeft.innerText = newVal.hours;
+                minutesLeft.innerText = newVal.minutes;
+                secondsLeft.innerText = newVal.seconds;
+            }
+            else {
+                daysLeft.innerText = 0;
+                hoursLeft.innerText = 0;
+                minutesLeft.innerText = 0;
+                secondsLeft.innerText = 0;
+            }
         });
 
         var toast = document.getElementById('toast');
         var update = document.getElementById('update');
-        update.addEventListener('click', function() {
+    /*    update.addEventListener('click', function() {
             update.setAttribute('disabled', 'true');
             nodecg.sendMessage('updateTotal', function (err, updated) {
                 update.removeAttribute('disabled');
 
                 if (err) {
                     console.error(err.message);
-                    toast.text = 'Error updating total. Check console.';
+                    toast.text = 'Error updating jam timer. Check console.';
                     toast.show();
                     return;
                 }
 
                 if (updated) {
-                    console.info('[agdq16-layouts] Total successfully updated');
-                    toast.text = 'Successfully updated total.';
+                    console.info('[agdq16-layouts] Jam timer successfully updated');
+                    toast.text = 'Successfully updated jam timer.';
                     toast.show();
                 } else {
-                    console.info('[agdq16-layouts] Total unchanged, not updated');
-                    toast.text = 'Total unchanged, not updated.';
+                    console.info('[agdq16-layouts] Jam timer unchanged, not updated');
+                    toast.text = 'Jam timer unchanged, not updated.';
                     toast.show();
                 }
             });
-        });
-
-        var totalInput = window.top.document.querySelector('#agdq16-layouts_edit-total iframe')
-                .contentDocument.getElementById('input');
-        document.getElementById('edit').addEventListener('click', function() {
-            totalInput.value = total.value.raw;
-        });
+        });*/
+//Kasper: Edit functionality
+//        var totalInput = window.top.document.querySelector('#agdq16-layouts_edit-jamTimer iframe')
+//                .contentDocument.getElementById('input');
+//        document.getElementById('edit').addEventListener('click', function() {
+//            totalInput.value = jamTimer.value.raw;
+//        });
     </script>
 </body>
 </html>

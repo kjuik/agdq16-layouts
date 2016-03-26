@@ -103,7 +103,7 @@
 
 			//These determine what is known to the app.
 			runInfoName.value = newVal.name;
-			runInfoStartTime.value = newVal.starttime;
+			runInfoStartTime.value = newVal.startTime;
 			runInfoRoles.value = newVal.roles;
 			runInfoCommentators.value = newVal.commentators;
 			runInfoCategory.value = newVal.category;

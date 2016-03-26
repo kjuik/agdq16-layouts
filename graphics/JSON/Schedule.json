@@ -2,28 +2,28 @@
 	"category": "",
 	"roles": "",
 	"name": "DummyShow1",
-	"starttime": "2016-01-03T16:30:00Z",
+	"startTime": "Friday: 19:08:00",
 	"commentators": "",
 	"order": 1
 }, {
 	"category": "Any%",
 	"roles": "WIIU",
 	"name": "DummyShow2",
-	"starttime": "2016-01-03T17:00:00Z",
+	"startTime": "Friday: 19:08:00",
 	"commentators": "",
 	"order": 2
 }, {
 	"category": "All Worlds",
 	"roles": "Wii",
 	"name": "DummyShow3",
-	"starttime": "2016-01-03T18:08:00Z",
+	"startTime": "Friday: 19:08:00",
 	"commentators": "",
 	"order": 3
 }, {
 	"category": "Expert through Master",
 	"roles": "GCN",
 	"name": "DummyShow4",
-	"starttime": "2016-01-03T19:08:00Z",
+	"startTime": "Friday: 19:08:00",
 	"commentators": "",
 	"order": 4
 
@@ -32,6 +32,6 @@
 	"commentators": "",
 	"roles": "N64",
 	"category": "Star Cup",
-	"starttime": "2016-01-09T20:55:27Z",
+	"startTime": "Friday: 19:08:00",
 	"order": 5
 }]
