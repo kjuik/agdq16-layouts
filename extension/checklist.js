@@ -3,21 +3,9 @@
 module.exports = function(nodecg) {
     // Create defaults array
     var checklistDefault = [
-        {name: 'Check for Interview', complete: false},
-        {name: 'Cue game music', complete: false},
-        {name: 'Check for Advertisement', complete: false},
-        {name: 'Commentator Mics', complete: false},
-        {name: 'Runner Game Audio', complete: false},
-        {name: 'TVs have Video', complete: false},
-        {name: 'Restart Recording', complete: false},
-        {name: 'Stream Audio', complete: false},
-        {name: 'Stream Video & Deinterlacing', complete: false},
-        {name: 'Stream Layout', complete: false},
-        {name: 'RACE ONLY: Confirm Runner Names Match Game Positions', complete: false},
-        {name: 'STEAM ONLY: Turn off Steam notifications', complete: false},
-        {name: 'Camera', complete: false},
-        {name: 'Reset Timer', complete: false},
-        {name: 'Check Notes', complete: false}
+        {name: 'Prepare video file', complete: false},
+        {name: 'Check/set up Interview names', complete: false},
+        {name: 'Prepare timer', complete: false}
     ];
 
     // Instantiate replicant with defaults object, which will load if no persisted data is present.
